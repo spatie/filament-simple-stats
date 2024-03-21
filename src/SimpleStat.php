@@ -2,6 +2,6 @@
 
 namespace Spatie\FilamentSimpleStat;
 
-class FilamentSimpleStat
+class SimpleStat
 {
 }

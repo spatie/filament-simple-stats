@@ -1,6 +1,6 @@
 {
     "name": "spatie/filament-simple-stats",
-    "description": " Opinionated prebuilt stat widgets to quickly add to your Filament dashboards. ",
+    "description": "Opinionated prebuilt stat widgets to quickly add to your Filament dashboards.",
     "keywords": [
         "Spatie",
         "laravel",
@@ -17,8 +17,9 @@
     ],
     "require": {
         "php": "^8.2",
-        "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0"
+        "filament/widgets": "^3.2",
+        "illuminate/contracts": "^10.0||^11.0",
+        "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "laravel/pint": "^1.14",
@@ -41,8 +42,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\FilamentSimpleStat\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Spatie\\FilamentSimpleStat\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -50,8 +50,7 @@
         "clear": "@php vendor/bin/testbench package:purge-filament-simple-stats --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
-            "@composer run prepare",
-            "@php vendor/bin/testbench workbench:build --ansi"
+            "@composer run prepare"
         ],
         "start": [
             "Composer\\Config::disableProcessTimeout",
@@ -74,10 +73,7 @@
         "laravel": {
             "providers": [
                 "Spatie\\FilamentSimpleStat\\FilamentSimpleStatServiceProvider"
-            ],
-            "aliases": {
-                "FilamentSimpleStat": "Spatie\\FilamentSimpleStat\\Facades\\FilamentSimpleStat"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
