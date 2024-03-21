@@ -4,7 +4,6 @@ namespace Spatie\FilamentSimpleStat;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\FilamentSimpleStat\Commands\FilamentSimpleStatCommand;
 
 class FilamentSimpleStatServiceProvider extends PackageServiceProvider
 {
