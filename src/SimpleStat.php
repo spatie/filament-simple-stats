@@ -29,6 +29,7 @@ class SimpleStat
     public function label(string $label): self
     {
         $this->label = $label;
+
         return $this;
     }
 
@@ -103,12 +104,14 @@ class SimpleStat
     private function buildCountStat(Collection $trendData): Stat
     {
         $total = $trendData->sum('aggregate');
+
         return $this->buildStat($total, $trendData, AggregateType::Count);
     }
 
     private function buildAverageStat(Collection $trendData): Stat
     {
         $total = $trendData->average('aggregate');
+
         return $this->buildStat($total, $trendData, AggregateType::Average);
     }
 
@@ -130,11 +133,11 @@ class SimpleStat
             $label .= 'Average ';
         }
 
-        if($this->dateColumn === 'created_at') {
+        if ($this->dateColumn === 'created_at') {
             $label .= 'new ';
-        } elseif($this->dateColumn === 'updated_at') {
+        } elseif ($this->dateColumn === 'updated_at') {
             $label .= 'updated ';
-        } elseif($this->dateColumn === 'deleted_at') {
+        } elseif ($this->dateColumn === 'deleted_at') {
             $label .= 'deleted ';
         }
 
