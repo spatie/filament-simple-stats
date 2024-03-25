@@ -111,6 +111,7 @@ class SimpleStat
     private function buildAverageStat(Collection $trendData): Stat
     {
         $total = $trendData->average('aggregate');
+
         return $this->buildStat($total ?? '', $trendData, AggregateType::Average);
     }
 
