@@ -28,14 +28,14 @@ class SimpleStat
         return $this;
     }
 
-    public function last30Days(): self
-    {
-        return $this->lastDays(30);
-    }
-
     public function last7Days(): self
     {
         return $this->lastDays(7);
+    }
+
+    public function last30Days(): self
+    {
+        return $this->lastDays(30);
     }
 
     public function lastDays(int $days): self
