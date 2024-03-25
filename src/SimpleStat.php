@@ -6,20 +6,19 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class SimpleStat
 {
     public Trend $trend;
 
-    public function __construct(private readonly string $model)
+    public function __construct(private readonly string $title, string $model)
     {
         $this->trend = Trend::model($model);
     }
 
-    public static function make(string $model): self
+    public static function make(string $title, string $model): self
     {
-        return new self($model);
+        return new self($title, $model);
     }
 
     public function dateColumn(string $dateColumn): self
@@ -49,26 +48,17 @@ class SimpleStat
         return $this;
     }
 
-    public function countPerDay(): Stat
+    public function dailyCount(): Stat
     {
         $perDayTrend = $this->trend->perDay()->count();
         $total = $perDayTrend->sum('aggregate');
 
-        return $this->buildStat($total, $perDayTrend, __('Last 30 days'));
+        return $this->buildStat($total, $perDayTrend);
     }
 
-    private function buildStat(string $faceValue, Collection $chartValues, string $description = ''): Stat
+    private function buildStat(string $faceValue, Collection $chartValues): Stat
     {
-        return Stat::make($this->getEntityTitleFromModel(), $faceValue)
-            ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray())
-            ->description($description);
-    }
-
-    private function getEntityTitleFromModel(): string
-    {
-        $pieces = explode('\\', $this->model);
-        $entity = Str::plural(end($pieces));
-
-        return __('New :entity', ['entity' => $entity]);
+        return Stat::make($this->title, $faceValue)
+            ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray());
     }
 }

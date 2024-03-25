@@ -21,7 +21,7 @@ it('can set a period for the last 30 days', function () {
     expect($simpleStat->trend->start)->toEqual(Carbon::parse('2024-01-24'));
     expect($simpleStat->trend->end)->toEqual(Carbon::parse('2024-02-22'));
 
-    expect($simpleStat->countPerDay()->getChart())->toHaveCount(30);
+    expect($simpleStat->dailyCount()->getChart())->toHaveCount(30);
 });
 
 it('can set a period for the last 7 days', function () {
@@ -30,5 +30,5 @@ it('can set a period for the last 7 days', function () {
     expect($simpleStat->trend->start)->toEqual(Carbon::parse('2024-02-16'));
     expect($simpleStat->trend->end)->toEqual(Carbon::parse('2024-02-22'));
 
-    expect($simpleStat->countPerDay()->getChart())->toHaveCount(7);
+    expect($simpleStat->dailyCount()->getChart())->toHaveCount(7);
 });
