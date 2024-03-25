@@ -44,7 +44,7 @@ class SimpleStat
         $perDayTrend = $this->trend->perDay()->count();
         $total = $perDayTrend->sum('aggregate');
 
-        return $this->buildStat($total, $perDayTrend,  __('Last 30 days'));
+        return $this->buildStat($total, $perDayTrend, __('Last 30 days'));
     }
 
     private function buildStat(string $faceValue, Collection $chartValues, string $description = ''): Stat
