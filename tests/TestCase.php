@@ -2,10 +2,7 @@
 
 namespace Spatie\FilamentSimpleStat\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\FilamentSimpleStat\Providers\FilamentSimpleStatServiceProvider;
-use Spatie\FilamentSimpleStat\Tests\Support\TestServiceProvider;
 
 class TestCase extends Orchestra
 {
