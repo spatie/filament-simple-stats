@@ -14,6 +14,10 @@ class SimpleStat
 
     protected ?string $label;
 
+    protected ?string $description;
+
+    protected bool $overWriteDescription = false;
+
     public string $dateColumn = 'created_at';
 
     public function __construct(private readonly string $model)
@@ -29,6 +33,14 @@ class SimpleStat
     public function label(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function description(string $description): self
+    {
+        $this->description = $description;
+        $this->overWriteDescription = true;
 
         return $this;
     }
@@ -57,6 +69,10 @@ class SimpleStat
             start: now()->subDays($days - 1),
             end: now(),
         );
+
+        if (!$this->overWriteDescription) {
+            $this->description = __('Last :days days', ['days' => $days]);
+        }
 
         return $this;
     }
@@ -118,7 +134,8 @@ class SimpleStat
     private function buildStat(string $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
     {
         return Stat::make($this->buildLabel($aggregateType), $faceValue)
-            ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray());
+            ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray())
+            ->description($this->description);
     }
 
     private function buildLabel(AggregateType $aggregateType): string
