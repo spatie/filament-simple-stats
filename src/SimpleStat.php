@@ -48,12 +48,56 @@ class SimpleStat
         return $this;
     }
 
+    public function hourlyCount(): Stat
+    {
+        return $this->buildCountStat($this->trend->perHour()->count());
+    }
+
     public function dailyCount(): Stat
     {
-        $perDayTrend = $this->trend->perDay()->count();
-        $total = $perDayTrend->sum('aggregate');
+        return $this->buildCountStat($this->trend->perDay()->count());
+    }
 
-        return $this->buildStat($total, $perDayTrend);
+    public function monthlyCount(): Stat
+    {
+        return $this->buildCountStat($this->trend->perMonth()->count());
+    }
+
+    public function yearlyCount(): Stat
+    {
+        return $this->buildCountStat($this->trend->perYear()->count());
+    }
+
+    public function hourlyAverage(): Stat
+    {
+        return $this->buildAverageStat($this->trend->perHour()->count());
+    }
+
+    public function dailyAverage(): Stat
+    {
+        return $this->buildAverageStat($this->trend->perDay()->count());
+    }
+
+    public function monthlyAverage(): Stat
+    {
+        return $this->buildAverageStat($this->trend->perMonth()->count());
+    }
+
+    public function yearlyAverage(): Stat
+    {
+        return $this->buildAverageStat($this->trend->perYear()->count());
+    }
+
+    private function buildCountStat(Collection $trendData): Stat
+    {
+        $total = $trendData->sum('aggregate');
+        return $this->buildStat($total, $trendData);
+    }
+
+    private function buildAverageStat(Collection $trendData): Stat
+    {
+        $total = $trendData->average('aggregate');
+        return $this->buildStat($total, $trendData);
     }
 
     private function buildStat(string $faceValue, Collection $chartValues): Stat
