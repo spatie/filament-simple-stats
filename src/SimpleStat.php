@@ -31,8 +31,18 @@ class SimpleStat
 
     public function last30Days(): self
     {
+        return $this->lastDays(30);
+    }
+
+    public function last7Days(): self
+    {
+        return $this->lastDays(7);
+    }
+
+    public function lastDays(int $days): self
+    {
         $this->trend->between(
-            start: now()->subDays(29),
+            start: now()->subDays($days - 1),
             end: now(),
         );
 
