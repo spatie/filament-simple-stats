@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class SimpleStat
 {
-    private Trend $trend;
+    public Trend $trend;
 
     public function __construct(private readonly string $model)
     {
