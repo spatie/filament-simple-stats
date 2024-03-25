@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection ALL */
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Carbon;
