@@ -6,24 +6,36 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class SimpleStat
 {
     public Trend $trend;
 
-    public function __construct(private readonly string $title, string $model)
+    protected ?string $label;
+
+    public string $dateColumn = 'created_at';
+
+    public function __construct(private readonly string $model)
     {
-        $this->trend = Trend::model($model);
+        $this->trend = Trend::model($model)->dateColumn($this->dateColumn);
     }
 
-    public static function make(string $title, string $model): self
+    public static function make(string $model): self
     {
-        return new self($title, $model);
+        return new self($model);
+    }
+
+    public function label(string $label): self
+    {
+        $this->label = $label;
+        return $this;
     }
 
     public function dateColumn(string $dateColumn): self
     {
         $this->trend->dateColumn($dateColumn);
+        $this->dateColumn = $dateColumn;
 
         return $this;
     }
@@ -91,18 +103,43 @@ class SimpleStat
     private function buildCountStat(Collection $trendData): Stat
     {
         $total = $trendData->sum('aggregate');
-        return $this->buildStat($total, $trendData);
+        return $this->buildStat($total, $trendData, AggregateType::Count);
     }
 
     private function buildAverageStat(Collection $trendData): Stat
     {
         $total = $trendData->average('aggregate');
-        return $this->buildStat($total, $trendData);
+        return $this->buildStat($total, $trendData, AggregateType::Average);
     }
 
-    private function buildStat(string $faceValue, Collection $chartValues): Stat
+    private function buildStat(string $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
     {
-        return Stat::make($this->title, $faceValue)
+        return Stat::make($this->buildLabel($aggregateType), $faceValue)
             ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray());
+    }
+
+    private function buildLabel(AggregateType $aggregateType): string
+    {
+        if (isset($this->label)) {
+            return $this->label;
+        }
+
+        $label = '';
+
+        if ($aggregateType === AggregateType::Average) {
+            $label .= 'Average ';
+        }
+
+        if($this->dateColumn === 'created_at') {
+            $label .= 'new ';
+        } elseif($this->dateColumn === 'updated_at') {
+            $label .= 'updated ';
+        } elseif($this->dateColumn === 'deleted_at') {
+            $label .= 'deleted ';
+        }
+
+        $label .= Str::plural(Str::title(Str::snake(class_basename($this->model), ' ')));
+
+        return ucwords($label);
     }
 }
