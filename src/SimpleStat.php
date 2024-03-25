@@ -70,7 +70,7 @@ class SimpleStat
             end: now(),
         );
 
-        if (!$this->overWriteDescription) {
+        if (! $this->overWriteDescription) {
             $this->description = __('Last :days days', ['days' => $days]);
         }
 
