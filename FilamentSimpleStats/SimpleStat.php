@@ -71,7 +71,7 @@ class SimpleStat
 
         $this->trend->between(
             start: now()->startOfDay()->subDays($days - 1),
-            end:  now()->startOfDay(),
+            end: now()->startOfDay(),
         );
 
         if (! $this->overWriteDescription) {
@@ -179,7 +179,7 @@ class SimpleStat
     private function formatFaceValue(int|float $total)
     {
         if ($total > 1000) {
-            return number_format($total / 1000, 2) . 'k';
+            return number_format($total / 1000, 2).'k';
         }
 
         return $total;
