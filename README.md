@@ -6,6 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/filament-simple-stats.svg?style=flat-square)](https://packagist.org/packages/spatie/filament-simple-stats)
 
 Opinionated prebuilt stat widgets to quickly add to your Filament dashboards.
+This package combines the power of Filament Stat widgets and the [Flowframe/laravel-trend](https://github.com/Flowframe/laravel-trend) package to provide you with a simple way to add stats to your Filament dashboards.
 
 ## Support us
 
@@ -25,9 +26,16 @@ composer require spatie/filament-simple-stats
 
 ## Usage
 
+Inside your Filament Widget class:
+
 ```php
-$filamentSimpleStat = new Spatie\FilamentSimpleStat();
-echo $filamentSimpleStat->echoPhrase('Hello, Spatie!');
+protected function getStats(): array
+    {
+        return [
+            SimpleStat::make(User::class)->last30Days()->dailyCount(),
+            SimpleStat::make(Purchase::class)->last30Days()->dailySum('earnings'),
+        ];
+    }
 ```
 
 ## Testing
