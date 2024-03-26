@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\FilamentSimpleStat;
+namespace Spatie\FilamentSimpleStats;
 
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;

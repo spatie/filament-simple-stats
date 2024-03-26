@@ -1,5 +1,5 @@
 <?php
 
-use Spatie\FilamentSimpleStat\Tests\TestCase;
+use Spatie\FilamentSimpleStats\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\FilamentSimpleStat;
+namespace Spatie\FilamentSimpleStats;
 
 enum AggregateType
 {

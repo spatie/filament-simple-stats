@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\FilamentSimpleStat\Tests\Support;
+namespace Spatie\FilamentSimpleStats\Tests\Support;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

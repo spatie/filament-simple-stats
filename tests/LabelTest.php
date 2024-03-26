@@ -2,8 +2,8 @@
 
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Carbon;
-use Spatie\FilamentSimpleStat\SimpleStat;
-use Spatie\FilamentSimpleStat\Tests\Support\ExampleEvent;
+use Spatie\FilamentSimpleStats\SimpleStat;
+use Spatie\FilamentSimpleStats\Tests\Support\ExampleEvent;
 
 beforeEach(function () {
     Carbon::setTestNow(Carbon::parse('2024-02-22'));

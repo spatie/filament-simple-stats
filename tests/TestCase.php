@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\FilamentSimpleStat\Tests;
+namespace Spatie\FilamentSimpleStats\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
 
