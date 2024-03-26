@@ -20,6 +20,8 @@ class SimpleStat
 
     public string $dateColumn = 'created_at';
 
+    public ?string $aggregateColumn;
+
     public function __construct(private readonly string $model)
     {
         $this->trend = Trend::model($model)->dateColumn($this->dateColumn);
@@ -65,9 +67,11 @@ class SimpleStat
 
     public function lastDays(int $days): self
     {
+        $today = now()->startOfDay();
+
         $this->trend->between(
-            start: now()->subDays($days - 1),
-            end: now(),
+            start: now()->startOfDay()->subDays($days - 1),
+            end:  now()->startOfDay(),
         );
 
         if (! $this->overWriteDescription) {
@@ -117,6 +121,33 @@ class SimpleStat
         return $this->buildAverageStat($this->trend->perYear()->count());
     }
 
+    public function hourlySum(string $column)
+    {
+        $this->aggregateColumn = $column;
+
+        $trendData = $this->trend->perHour()->sum('earnings');
+
+        return $this->buildSumStat($trendData);
+    }
+
+    public function dailySum(string $column)
+    {
+        $this->aggregateColumn = $column;
+
+        $trendData = $this->trend->perDay()->sum('earnings');
+
+        return $this->buildSumStat($trendData);
+    }
+
+    public function monthlySum(string $column)
+    {
+        $this->aggregateColumn = $column;
+
+        $trendData = $this->trend->perMonth()->sum('earnings');
+
+        return $this->buildSumStat($trendData);
+    }
+
     private function buildCountStat(Collection $trendData): Stat
     {
         $total = $trendData->sum('aggregate');
@@ -131,11 +162,27 @@ class SimpleStat
         return $this->buildStat($total ?? '', $trendData, AggregateType::Average);
     }
 
-    private function buildStat(string $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
+    private function buildSumStat(Collection $trendData): Stat
     {
-        return Stat::make($this->buildLabel($aggregateType), $faceValue)
+        $total = $trendData->sum('aggregate');
+
+        return $this->buildStat($total, $trendData, AggregateType::Sum);
+    }
+
+    private function buildStat(int|float $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
+    {
+        return Stat::make($this->buildLabel($aggregateType), $this->formatFaceValue($faceValue))
             ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray())
             ->description($this->description);
+    }
+
+    private function formatFaceValue(int|float $total)
+    {
+        if ($total > 1000) {
+            return number_format($total / 1000, 2) . 'k';
+        }
+
+        return $total;
     }
 
     private function buildLabel(AggregateType $aggregateType): string
@@ -148,6 +195,8 @@ class SimpleStat
 
         if ($aggregateType === AggregateType::Average) {
             $label .= 'Average ';
+        } elseif ($aggregateType === AggregateType::Sum) {
+            $label .= 'Total ';
         }
 
         if ($this->dateColumn === 'created_at') {
@@ -158,7 +207,11 @@ class SimpleStat
             $label .= 'deleted ';
         }
 
-        $label .= Str::plural(Str::title(Str::snake(class_basename($this->model), ' ')));
+        if (! isset($this->aggregateColumn)) {
+            $label .= Str::plural(Str::title(Str::snake(class_basename($this->model), ' ')));
+        } else {
+            $label .= Str::plural(Str::title(Str::snake($this->aggregateColumn, ' ')));
+        }
 
         return ucwords($label);
     }

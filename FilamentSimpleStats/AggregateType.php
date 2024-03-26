@@ -6,4 +6,5 @@ enum AggregateType
 {
     case Count;
     case Average;
+    case Sum;
 }

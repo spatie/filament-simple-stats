@@ -43,7 +43,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\FilamentSimpleStat\\Tests\\": "tests/"
+            "Spatie\\FilamentSimpleStats\\Tests\\": "tests/"
         }
     },
     "scripts": {
