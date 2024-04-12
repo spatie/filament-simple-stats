@@ -25,3 +25,8 @@ it('constructs a description based on the interval', function () {
     $simpleStat = SimpleStat::make(ExampleEvent::class)->lastDays(14)->dailyAverage();
     expect($simpleStat->getDescription())->toBe('Last 14 days');
 });
+
+it('will not override a custom description', function () {
+    $simpleStat = SimpleStat::make(ExampleEvent::class)->description('Custom description')->last7Days()->dailyAverage();
+    expect($simpleStat->getDescription())->toBe('Custom description');
+});
