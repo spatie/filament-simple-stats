@@ -32,7 +32,7 @@
     </logging>
     <source>
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">./FilamentSimpleStats</directory>
         </include>
     </source>
 </phpunit>
