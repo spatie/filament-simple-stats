@@ -67,8 +67,6 @@ class SimpleStat
 
     public function lastDays(int $days): self
     {
-        $today = now()->startOfDay();
-
         $this->trend->between(
             start: now()->startOfDay()->subDays($days - 1),
             end: now()->startOfDay(),
@@ -121,7 +119,7 @@ class SimpleStat
         return $this->buildAverageStat($this->trend->perYear()->count());
     }
 
-    public function hourlySum(string $column)
+    public function hourlySum(string $column): Stat
     {
         $this->aggregateColumn = $column;
 
@@ -130,7 +128,7 @@ class SimpleStat
         return $this->buildSumStat($trendData);
     }
 
-    public function dailySum(string $column)
+    public function dailySum(string $column): Stat
     {
         $this->aggregateColumn = $column;
 
@@ -139,7 +137,7 @@ class SimpleStat
         return $this->buildSumStat($trendData);
     }
 
-    public function monthlySum(string $column)
+    public function monthlySum(string $column): Stat
     {
         $this->aggregateColumn = $column;
 
@@ -148,35 +146,35 @@ class SimpleStat
         return $this->buildSumStat($trendData);
     }
 
-    private function buildCountStat(Collection $trendData): Stat
+    protected function buildCountStat(Collection $trendData): Stat
     {
         $total = $trendData->sum('aggregate');
 
         return $this->buildStat($total, $trendData, AggregateType::Count);
     }
 
-    private function buildAverageStat(Collection $trendData): Stat
+    protected function buildAverageStat(Collection $trendData): Stat
     {
         $total = $trendData->average('aggregate');
 
         return $this->buildStat($total ?? '', $trendData, AggregateType::Average);
     }
 
-    private function buildSumStat(Collection $trendData): Stat
+    protected function buildSumStat(Collection $trendData): Stat
     {
         $total = $trendData->sum('aggregate');
 
         return $this->buildStat($total, $trendData, AggregateType::Sum);
     }
 
-    private function buildStat(int|float $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
+    protected function buildStat(int|float $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
     {
         return Stat::make($this->buildLabel($aggregateType), $this->formatFaceValue($faceValue))
             ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray())
             ->description($this->description);
     }
 
-    private function formatFaceValue(int|float $total)
+    protected function formatFaceValue(int|float $total): string
     {
         if ($total > 1000) {
             return number_format($total / 1000, 2).'k';
@@ -185,34 +183,36 @@ class SimpleStat
         return $total;
     }
 
-    private function buildLabel(AggregateType $aggregateType): string
+    protected function buildLabel(AggregateType $aggregateType): string
     {
         if (isset($this->label)) {
             return $this->label;
         }
 
-        $label = '';
+        $label = match ($aggregateType) {
+            AggregateType::Average => 'Average ',
+            AggregateType::Sum => 'Total ',
+            default => '',
+        };
 
-        if ($aggregateType === AggregateType::Average) {
-            $label .= 'Average ';
-        } elseif ($aggregateType === AggregateType::Sum) {
-            $label .= 'Total ';
-        }
+        $label .= match($this->dateColumn) {
+            'created_at' => 'new ',
+            'updated_at' => 'updated ',
+            'deleted_at' => 'deleted ',
+            default => '',
+        };
 
-        if ($this->dateColumn === 'created_at') {
-            $label .= 'new ';
-        } elseif ($this->dateColumn === 'updated_at') {
-            $label .= 'updated ';
-        } elseif ($this->dateColumn === 'deleted_at') {
-            $label .= 'deleted ';
-        }
-
-        if (! isset($this->aggregateColumn)) {
-            $label .= Str::plural(Str::title(Str::snake(class_basename($this->model), ' ')));
-        } else {
-            $label .= Str::plural(Str::title(Str::snake($this->aggregateColumn, ' ')));
-        }
+        $label .= $this->getEntityName();
 
         return ucwords($label);
+    }
+
+    protected function getEntityName(): string
+    {
+        if (! isset($this->aggregateColumn)) {
+            return Str::plural(Str::title(Str::snake(class_basename($this->model), ' ')));
+        }
+
+        return Str::plural(Str::title(Str::snake($this->aggregateColumn, ' ')));
     }
 }
