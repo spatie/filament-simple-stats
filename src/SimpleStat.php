@@ -195,7 +195,7 @@ class SimpleStat
             default => '',
         };
 
-        $label .= match($this->dateColumn) {
+        $label .= match ($this->dateColumn) {
             'created_at' => 'new ',
             'updated_at' => 'updated ',
             'deleted_at' => 'deleted ',
