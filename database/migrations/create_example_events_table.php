@@ -10,6 +10,7 @@ return new class() extends Migration
     {
         Schema::create('example_events', static function (Blueprint $table) {
             $table->id();
+            $table->integer('score');
             $table->timestamps();
         });
     }

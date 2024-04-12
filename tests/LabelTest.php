@@ -32,3 +32,15 @@ it('uses different wording when the column type is updated_at', function () {
 
     expect($simpleStat->getLabel())->toBe('Updated Example Events');
 });
+
+it('does not overwrite a custom label', function () {
+    $simpleStat = SimpleStat::make(ExampleEvent::class)->label('Custom Label')->last7Days()->monthlyCount();
+
+    expect($simpleStat->getLabel())->toBe('Custom Label');
+});
+
+it('adapts for a custom aggregate column', function () {
+    $simpleStat = SimpleStat::make(ExampleEvent::class)->last7Days()->dailySum('score');
+
+    expect($simpleStat->getLabel())->toBe('Total New Scores');
+});

@@ -10,6 +10,8 @@ class ExampleEventFactory extends Factory
 
     public function definition(): array
     {
-        return [];
+        return [
+            'score' => $this->faker->numberBetween(1, 100),
+        ];
     }
 }

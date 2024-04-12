@@ -123,7 +123,7 @@ class SimpleStat
     {
         $this->aggregateColumn = $column;
 
-        $trendData = $this->trend->perHour()->sum('earnings');
+        $trendData = $this->trend->perHour()->sum($column);
 
         return $this->buildSumStat($trendData);
     }
@@ -132,7 +132,7 @@ class SimpleStat
     {
         $this->aggregateColumn = $column;
 
-        $trendData = $this->trend->perDay()->sum('earnings');
+        $trendData = $this->trend->perDay()->sum($column);
 
         return $this->buildSumStat($trendData);
     }
@@ -141,7 +141,7 @@ class SimpleStat
     {
         $this->aggregateColumn = $column;
 
-        $trendData = $this->trend->perMonth()->sum('earnings');
+        $trendData = $this->trend->perMonth()->sum($column);
 
         return $this->buildSumStat($trendData);
     }
