@@ -79,11 +79,6 @@ class SimpleStat
         return $this;
     }
 
-    public function hourlyCount(): Stat
-    {
-        return $this->buildCountStat($this->trend->perHour()->count());
-    }
-
     public function dailyCount(): Stat
     {
         return $this->buildCountStat($this->trend->perDay()->count());
@@ -99,11 +94,6 @@ class SimpleStat
         return $this->buildCountStat($this->trend->perYear()->count());
     }
 
-    public function hourlyAverage(): Stat
-    {
-        return $this->buildAverageStat($this->trend->perHour()->count());
-    }
-
     public function dailyAverage(): Stat
     {
         return $this->buildAverageStat($this->trend->perDay()->count());
@@ -117,15 +107,6 @@ class SimpleStat
     public function yearlyAverage(): Stat
     {
         return $this->buildAverageStat($this->trend->perYear()->count());
-    }
-
-    public function hourlySum(string $column): Stat
-    {
-        $this->aggregateColumn = $column;
-
-        $trendData = $this->trend->perHour()->sum($column);
-
-        return $this->buildSumStat($trendData);
     }
 
     public function dailySum(string $column): Stat

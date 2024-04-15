@@ -14,14 +14,3 @@ beforeEach(function () {
         ExampleEvent::factory()->count(rand(0, 5))->create(['created_at' => $date]);
     }
 });
-
-it('can do daily counts', function () {
-    $simpleStat = SimpleStat::make(ExampleEvent::class)->lastDays(2);
-
-    ray($simpleStat);
-
-    $simpleStat = $simpleStat->hourlyAverage();
-
-    // Problem we get 48 hours, we would expect to get 72 hours.
-    expect($simpleStat->getChart())->toHaveCount(48);
-});
