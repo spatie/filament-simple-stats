@@ -38,3 +38,11 @@ it('can create a widget with yearly average', function () {
     expect($widget->getDescription())->toEqual('Last 5 year(s)');
     expect($widget->getValue())->toBeString();
 });
+
+it('can create a widget with yearly count', function () {
+    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(5)->yearlyCount();
+
+    expect($widget->getLabel())->toEqual('New Example Events');
+    expect($widget->getDescription())->toEqual('Last 5 year(s)');
+    expect($widget->getValue())->toBeString();
+});
