@@ -79,6 +79,34 @@ class SimpleStat
         return $this;
     }
 
+    public function lastMonths(int $months): self
+    {
+        $this->trend->between(
+            start: now()->subMonths($months),
+            end: now(),
+        );
+
+        if (! $this->overWriteDescription) {
+            $this->description = __('Last :months months', ['months' => $months]);
+        }
+
+        return $this;
+    }
+
+    public function lastYears(int $years): self
+    {
+        $this->trend->between(
+            start: now()->subYears($years),
+            end: now(),
+        );
+
+        if (! $this->overWriteDescription) {
+            $this->description = __('Last :years year(s)', ['years' => $years]);
+        }
+
+        return $this;
+    }
+
     public function dailyCount(): Stat
     {
         return $this->buildCountStat($this->trend->perDay()->count());
@@ -99,14 +127,18 @@ class SimpleStat
         return $this->buildAverageStat($this->trend->perDay()->count());
     }
 
-    public function monthlyAverage(): Stat
+    public function monthlyAverage(string $column): Stat
     {
-        return $this->buildAverageStat($this->trend->perMonth()->count());
+        $this->label('Average Monthly '.Str::title(Str::snake($column, ' ')));
+
+        return $this->buildAverageStat($this->trend->perMonth()->average($column));
     }
 
-    public function yearlyAverage(): Stat
+    public function yearlyAverage(string $column): Stat
     {
-        return $this->buildAverageStat($this->trend->perYear()->count());
+        $this->label('Average Yearly '.Str::title(Str::snake($column, ' ')));
+
+        return $this->buildAverageStat($this->trend->perYear()->average($column));
     }
 
     public function dailySum(string $column): Stat
@@ -176,12 +208,14 @@ class SimpleStat
             default => '',
         };
 
-        $label .= match ($this->dateColumn) {
-            'created_at' => 'new ',
-            'updated_at' => 'updated ',
-            'deleted_at' => 'deleted ',
-            default => '',
-        };
+        if ($aggregateType !== AggregateType::Sum && $aggregateType !== AggregateType::Average) {
+            $label .= match ($this->dateColumn) {
+                'created_at' => 'new ',
+                'updated_at' => 'updated ',
+                'deleted_at' => 'deleted ',
+                default => '',
+            };
+        }
 
         $label .= $this->getEntityName();
 

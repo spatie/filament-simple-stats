@@ -41,3 +41,21 @@ it('can set a period for the last x days', function () {
 
     expect($simpleStat->dailyCount()->getChart())->toHaveCount(5);
 });
+
+it('can set a period for the last x months', function () {
+    $simpleStat = SimpleStat::make(ExampleEvent::class)->lastMonths(2);
+
+    expect($simpleStat->trend->start)->toEqual(Carbon::parse('2023-12-22'));
+    expect($simpleStat->trend->end)->toEqual(Carbon::parse('2024-02-22'));
+
+    expect($simpleStat->dailyCount()->getChart())->toHaveCount(63);
+});
+
+it('can set a period for the last x years', function () {
+    $simpleStat = SimpleStat::make(ExampleEvent::class)->lastYears(2);
+
+    expect($simpleStat->trend->start)->toEqual(Carbon::parse('2022-02-22'));
+    expect($simpleStat->trend->end)->toEqual(Carbon::parse('2024-02-22'));
+
+    expect($simpleStat->dailyCount()->getChart())->toHaveCount(731);
+});
