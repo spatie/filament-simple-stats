@@ -2,6 +2,7 @@
 
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Carbon;
+use Spatie\FilamentSimpleStats\SimpleStat;
 use Spatie\FilamentSimpleStats\Tests\Support\ExampleEvent;
 
 beforeEach(function () {

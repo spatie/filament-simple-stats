@@ -18,7 +18,7 @@ beforeEach(function () {
 it('constructs a label for daily average', function () {
     $simpleStat = SimpleStat::make(ExampleEvent::class)->last7Days()->dailyAverage();
 
-    expect($simpleStat->getLabel())->toBe('Average New Example Events');
+    expect($simpleStat->getLabel())->toBe('Average Example Events');
 });
 
 it('constructs a label for monthly count', function () {
@@ -42,5 +42,5 @@ it('does not overwrite a custom label', function () {
 it('adapts for a custom aggregate column', function () {
     $simpleStat = SimpleStat::make(ExampleEvent::class)->last7Days()->dailySum('score');
 
-    expect($simpleStat->getLabel())->toBe('Total New Scores');
+    expect($simpleStat->getLabel())->toBe('Total Scores');
 });
