@@ -55,6 +55,13 @@ class SimpleStat
         return $this;
     }
 
+    public function where($column, $operator = null, $value = null, $boolean = 'and'): self
+    {
+        $this->trend->builder->where($column, $operator, $value, $boolean);
+
+        return $this;
+    }
+
     public function last7Days(): self
     {
         return $this->lastDays(7);

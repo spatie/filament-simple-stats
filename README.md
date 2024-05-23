@@ -38,6 +38,18 @@ protected function getStats(): array
     }
 ```
 
+### Modify the query
+You can use the `where` method to change the query. For example, to only show stats related to a specific user:
+
+```php
+protected function getStats(): array
+    {
+        return [
+            SimpleStat::make(Purchase::class)->where('user_id', auth()->id())->last30Days()->dailySum('earnings'),
+        ];
+    }
+```
+
 ## Testing
 
 ```bash
