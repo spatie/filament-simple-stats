@@ -46,3 +46,21 @@ it('can create a widget with yearly count', function () {
     expect($widget->getDescription())->toEqual('Last 5 year(s)');
     expect($widget->getValue())->toBeString();
 });
+
+it('applies a where condition to the query', function () {
+    $simpleStat = SimpleStat::make(ExampleEvent::class)->where('score', '>', 50);
+
+    $query = $simpleStat->trend->builder->getQuery();
+
+    $whereClause = collect($query->wheres)->firstWhere('column', 'score');
+
+    expect($whereClause)->not->toBeNull();
+    expect($whereClause['operator'])->toEqual('>');
+    expect($whereClause['value'])->toEqual(50);
+
+    $results = $simpleStat->trend->builder->get();
+
+    foreach ($results as $result) {
+        expect($result->score)->toBeGreaterThan(50);
+    }
+});
