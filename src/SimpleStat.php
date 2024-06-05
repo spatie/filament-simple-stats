@@ -76,7 +76,7 @@ class SimpleStat
     {
         $this->trend->between(
             start: now()->startOfDay()->subDays($days - 1),
-            end: now()->startOfDay(),
+            end: now()->endOfDay(),
         );
 
         if (! $this->overWriteDescription) {
@@ -90,7 +90,7 @@ class SimpleStat
     {
         $this->trend->between(
             start: now()->subMonths($months),
-            end: now(),
+            end: now()->endOfDay(),
         );
 
         if (! $this->overWriteDescription) {
@@ -104,7 +104,7 @@ class SimpleStat
     {
         $this->trend->between(
             start: now()->subYears($years),
-            end: now(),
+            end: now()->endOfDay(),
         );
 
         if (! $this->overWriteDescription) {

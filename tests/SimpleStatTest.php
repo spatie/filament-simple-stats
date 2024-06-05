@@ -11,7 +11,9 @@ beforeEach(function () {
     $period = CarbonPeriod::create('2022-01-24', '2024-03-25');
 
     foreach ($period as $date) {
-        ExampleEvent::factory()->count(rand(0, 5))->create(['created_at' => $date]);
+        ExampleEvent::factory()->count(rand(0, 5))->create([
+            'created_at' => $date->startOfDay()->addMinutes(rand(0, 1440 - 1))
+        ]);
     }
 });
 
