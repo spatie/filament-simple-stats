@@ -2,6 +2,14 @@
 
 All notable changes to `filament-simple-stats` will be documented in this file.
 
+## 0.1.4 - 2024-06-05
+
+### What's Changed
+
+* Added endOfDay to include the data of today by @KeizerDev in https://github.com/spatie/filament-simple-stats/pull/6
+
+**Full Changelog**: https://github.com/spatie/filament-simple-stats/compare/0.1.3...0.1.4
+
 ## 0.1.3 - 2024-05-27
 
 ### What's Changed
