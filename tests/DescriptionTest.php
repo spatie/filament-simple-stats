@@ -12,7 +12,7 @@ beforeEach(function () {
 
     foreach ($period as $date) {
         ExampleEvent::factory()->count(rand(0, 2))->create([
-            'created_at' => $date->startOfDay()->addMinutes(rand(0, 1440 - 1))
+            'created_at' => $date->startOfDay()->addMinutes(rand(0, 1440 - 1)),
         ]);
     }
 });
