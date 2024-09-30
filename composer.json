@@ -19,7 +19,7 @@
     "require": {
         "php": "^8.2|^8.3",
         "filament/widgets": "^3.2",
-        "flowframe/laravel-trend": "^0.2.0",
+        "flowframe/laravel-trend": "^0.3.0",
         "illuminate/contracts": "^10.0||^11.0",
         "spatie/laravel-package-tools": "^1.16"
     },
