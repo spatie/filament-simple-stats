@@ -50,6 +50,41 @@ protected function getStats(): array
     }
 ```
 
+### Trends
+
+By default, stats display period-over-period trends showing whether values have increased or decreased compared to the previous period.
+
+Upward trends are displayed with a green color and an upward arrow icon, while downward trends are displayed with a red color and a downward arrow icon. The percentage change is automatically calculated and displayed in the description.
+
+#### Disabling trends
+
+You can disable trends using the `withoutTrend()` method:
+
+```php
+protected function getStats(): array
+    {
+        return [
+            SimpleStat::make(User::class)->last30Days()->dailyCount()->withoutTrend(),
+        ];
+    }
+```
+
+#### Inverting trend colors
+
+For metrics where a decrease is positive (like error rates or costs), you can invert the color scheme using `invertTrendColors()`:
+
+```php
+protected function getStats(): array
+    {
+        return [
+            SimpleStat::make(Error::class)
+                ->last30Days()
+                ->dailyCount()
+                ->invertTrendColors(), // Downward trend = green, upward trend = red
+        ];
+    }
+```
+
 ## Testing
 
 ```bash
