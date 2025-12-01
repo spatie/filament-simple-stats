@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 it('can create a widget with monthly sum', function () {
-    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(1)->monthlySum('score');
+    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(1)->withoutTrend()->monthlySum('score');
 
     expect($widget->getLabel())->toEqual('Total Scores');
     expect($widget->getDescription())->toEqual('Last 1 year(s)');
@@ -26,7 +26,7 @@ it('can create a widget with monthly sum', function () {
 });
 
 it('can create a widget with monthly average', function () {
-    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(5)->monthlyAverage('score');
+    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(5)->withoutTrend()->monthlyAverage('score');
 
     expect($widget->getLabel())->toEqual('Average Monthly Score');
     expect($widget->getDescription())->toEqual('Last 5 year(s)');
@@ -34,7 +34,7 @@ it('can create a widget with monthly average', function () {
 });
 
 it('can create a widget with yearly average', function () {
-    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(5)->yearlyAverage('score');
+    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(5)->withoutTrend()->yearlyAverage('score');
 
     expect($widget->getLabel())->toEqual('Average Yearly Score');
     expect($widget->getDescription())->toEqual('Last 5 year(s)');
@@ -42,7 +42,7 @@ it('can create a widget with yearly average', function () {
 });
 
 it('can create a widget with yearly count', function () {
-    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(5)->yearlyCount();
+    $widget = SimpleStat::make(ExampleEvent::class)->lastYears(5)->withoutTrend()->yearlyCount();
 
     expect($widget->getLabel())->toEqual('New Example Events');
     expect($widget->getDescription())->toEqual('Last 5 year(s)');
