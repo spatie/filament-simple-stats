@@ -2,6 +2,7 @@
 
 namespace Spatie\FilamentSimpleStats;
 
+use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
@@ -26,9 +27,9 @@ class SimpleStat
 
     protected bool $invertTrendColors = false;
 
-    protected ?\DateTime $periodStart = null;
+    protected ?Carbon $periodStart = null;
 
-    protected ?\DateTime $periodEnd = null;
+    protected ?Carbon $periodEnd = null;
 
     protected ?string $periodType = null;
 
@@ -270,7 +271,7 @@ class SimpleStat
 
         // Apply any where clauses that were added via the where() method
         // We do this by creating a new query and copying the wheres
-        $originalWheres = $this->trend->builder->getQuery()->wheres ?? [];
+        $originalWheres = $this->trend->builder->getQuery()->wheres;
         foreach ($originalWheres as $where) {
             // Skip date-related where clauses from the between() method
             if (isset($where['column']) && $where['column'] === $this->dateColumn) {
@@ -357,7 +358,7 @@ class SimpleStat
             return number_format($total / 1000, 2).'k';
         }
 
-        return $total;
+        return (string) $total;
     }
 
     protected function buildLabel(AggregateType $aggregateType): string
