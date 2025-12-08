@@ -2,6 +2,14 @@
 
 All notable changes to `filament-simple-stats` will be documented in this file.
 
+## 1.0.0 - 2025-12-08
+
+### What's Changed
+
+* Add trends feature. by @timvandijck in https://github.com/spatie/filament-simple-stats/pull/23
+
+**Full Changelog**: https://github.com/spatie/filament-simple-stats/compare/0.2.1...1.0.0
+
 ## 0.2.1 - 2025-08-20
 
 ### What's Changed
