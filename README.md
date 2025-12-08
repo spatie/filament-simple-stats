@@ -8,6 +8,8 @@
 Opinionated prebuilt stat widgets to quickly add to your Filament dashboards.
 This package combines the power of Filament Stat widgets and the [Flowframe/laravel-trend](https://github.com/Flowframe/laravel-trend) package to provide you with a simple way to add stats to your Filament dashboards.
 
+<img src="https://github.com/spatie/filament-simple-stats/blob/main/example.png" width="840px" />
+
 ## Support us
 
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/filament-simple-stats.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/filament-simple-stats)
