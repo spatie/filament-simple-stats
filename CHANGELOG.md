@@ -2,6 +2,15 @@
 
 All notable changes to `filament-simple-stats` will be documented in this file.
 
+## 1.1.0 - 2026-02-09
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/spatie/filament-simple-stats/pull/24
+* Update filament/widgets requirement from ^4.0 to ^5.2 by @dependabot[bot] in https://github.com/spatie/filament-simple-stats/pull/28
+
+**Full Changelog**: https://github.com/spatie/filament-simple-stats/compare/1.0.0...1.1.0
+
 ## 1.0.0 - 2025-12-08
 
 ### What's Changed
