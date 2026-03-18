@@ -6,6 +6,7 @@ namespace Spatie\FilamentSimpleStats\Support;
 
 use Carbon\CarbonInterface;
 use Carbon\CarbonPeriod;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
@@ -121,7 +122,7 @@ final class Trend
 
     private function formatDateForDriver(): string
     {
-        /** @var \Illuminate\Database\Connection $connection */
+        /** @var Connection $connection */
         $connection = $this->builder->getConnection();
         $driver = $connection->getDriverName();
 
