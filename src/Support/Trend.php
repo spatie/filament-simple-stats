@@ -121,7 +121,9 @@ final class Trend
 
     private function formatDateForDriver(): string
     {
-        $driver = $this->builder->getConnection()->getDriverName();
+        /** @var \Illuminate\Database\Connection $connection */
+        $connection = $this->builder->getConnection();
+        $driver = $connection->getDriverName();
 
         return match ($driver) {
             'mysql', 'mariadb' => $this->mysqlFormat(),
@@ -137,6 +139,7 @@ final class Trend
             'day' => '%Y-%m-%d',
             'month' => '%Y-%m',
             'year' => '%Y',
+            default => throw new InvalidArgumentException("Unsupported interval: {$this->interval}"),
         };
 
         return "date_format({$this->dateColumn}, '{$format}')";
@@ -148,6 +151,7 @@ final class Trend
             'day' => 'YYYY-MM-DD',
             'month' => 'YYYY-MM',
             'year' => 'YYYY',
+            default => throw new InvalidArgumentException("Unsupported interval: {$this->interval}"),
         };
 
         return "to_char(\"{$this->dateColumn}\", '{$format}')";
@@ -159,6 +163,7 @@ final class Trend
             'day' => '%Y-%m-%d',
             'month' => '%Y-%m',
             'year' => '%Y',
+            default => throw new InvalidArgumentException("Unsupported interval: {$this->interval}"),
         };
 
         return "strftime('{$format}', {$this->dateColumn})";
@@ -170,6 +175,7 @@ final class Trend
             'day' => 'Y-m-d',
             'month' => 'Y-m',
             'year' => 'Y',
+            default => throw new InvalidArgumentException("Unsupported interval: {$this->interval}"),
         };
     }
 }
