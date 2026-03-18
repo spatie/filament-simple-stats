@@ -1,27 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\FilamentSimpleStats;
 
 use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Spatie\FilamentSimpleStats\Support\Trend;
+use Spatie\FilamentSimpleStats\Support\TrendValue;
 
 class SimpleStat
 {
     public Trend $trend;
 
-    protected ?string $label;
+    protected ?string $label = null;
 
-    protected ?string $description;
+    protected ?string $description = null;
 
     protected bool $overWriteDescription = false;
 
     public string $dateColumn = 'created_at';
 
-    public ?string $aggregateColumn;
+    public ?string $aggregateColumn = null;
 
     protected bool $showTrend = true;
 
@@ -70,7 +72,7 @@ class SimpleStat
         return $this;
     }
 
-    public function where($column, $operator = null, $value = null, $boolean = 'and'): self
+    public function where(mixed $column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): self
     {
         $this->trend->builder->where($column, $operator, $value, $boolean);
 
@@ -207,9 +209,7 @@ class SimpleStat
         $this->periodGrouping = 'day';
         $this->aggregateColumn = $column;
 
-        $trendData = $this->trend->perDay()->sum($column);
-
-        return $this->buildSumStat($trendData);
+        return $this->buildSumStat($this->trend->perDay()->sum($column));
     }
 
     public function monthlySum(string $column): Stat
@@ -217,11 +217,10 @@ class SimpleStat
         $this->periodGrouping = 'month';
         $this->aggregateColumn = $column;
 
-        $trendData = $this->trend->perMonth()->sum($column);
-
-        return $this->buildSumStat($trendData);
+        return $this->buildSumStat($this->trend->perMonth()->sum($column));
     }
 
+    /** @param Collection<int, TrendValue> $trendData */
     protected function buildCountStat(Collection $trendData): Stat
     {
         $total = $trendData->sum('aggregate');
@@ -229,6 +228,7 @@ class SimpleStat
         return $this->buildStat($total, $trendData, AggregateType::Count);
     }
 
+    /** @param Collection<int, TrendValue> $trendData */
     protected function buildAverageStat(Collection $trendData): Stat
     {
         $total = $trendData->average('aggregate');
@@ -236,6 +236,7 @@ class SimpleStat
         return $this->buildStat($total ?? '', $trendData, AggregateType::Average);
     }
 
+    /** @param Collection<int, TrendValue> $trendData */
     protected function buildSumStat(Collection $trendData): Stat
     {
         $total = $trendData->sum('aggregate');
@@ -263,30 +264,11 @@ class SimpleStat
             default => $this->periodEnd,
         };
 
-        // Create a fresh Trend instance for the previous period
-        // We need to get a base query without the date range constraint
-        $baseModel = $this->model;
-        $previousTrend = Trend::model($baseModel)
-            ->dateColumn($this->dateColumn);
+        $previousTrend = Trend::model($this->model)
+            ->dateColumn($this->dateColumn)
+            ->between(start: $previousStart, end: $previousEnd);
 
-        // Apply any where clauses that were added via the where() method
-        // We do this by creating a new query and copying the wheres
-        $originalWheres = $this->trend->builder->getQuery()->wheres;
-        foreach ($originalWheres as $where) {
-            // Skip date-related where clauses from the between() method
-            if (isset($where['column']) && $where['column'] === $this->dateColumn) {
-                continue;
-            }
-            // For now, just rebuild the query with the same wheres
-            // This is a simplified approach - might need refinement for complex queries
-        }
-
-        $previousTrend->between(
-            start: $previousStart,
-            end: $previousEnd,
-        );
-
-        $previousData = match ($this->periodGrouping) {
+        $previousTrend = match ($this->periodGrouping) {
             'day' => $previousTrend->perDay(),
             'month' => $previousTrend->perMonth(),
             'year' => $previousTrend->perYear(),
@@ -294,11 +276,11 @@ class SimpleStat
         };
 
         $previousData = match ($aggregateType) {
-            AggregateType::Count => $previousData->count(),
-            AggregateType::Sum => $previousData->sum($this->aggregateColumn),
+            AggregateType::Count => $previousTrend->count(),
+            AggregateType::Sum => $previousTrend->sum($this->aggregateColumn),
             AggregateType::Average => isset($this->aggregateColumn)
-                ? $previousData->average($this->aggregateColumn)
-                : $previousData->count(),
+                ? $previousTrend->average($this->aggregateColumn)
+                : $previousTrend->count(),
         };
 
         return match ($aggregateType) {
@@ -307,7 +289,8 @@ class SimpleStat
         };
     }
 
-    protected function buildStat(int|float $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
+    /** @param Collection<int, TrendValue> $chartValues */
+    protected function buildStat(int|float|string $faceValue, Collection $chartValues, AggregateType $aggregateType): Stat
     {
         $stat = Stat::make($this->buildLabel($aggregateType), $this->formatFaceValue($faceValue))
             ->chart($chartValues->map(fn (TrendValue $trend) => $trend->aggregate)->toArray())
@@ -343,7 +326,7 @@ class SimpleStat
         $description = ($percentageChange > 0 ? '+' : '-').$formattedPercentage;
 
         if ($this->description) {
-            $description = $this->description.' ('.$description.')';
+            $description = "{$this->description} ({$description})";
         }
 
         return $stat
@@ -352,8 +335,12 @@ class SimpleStat
             ->color($color);
     }
 
-    protected function formatFaceValue(int|float $total): string
+    protected function formatFaceValue(int|float|string $total): string
     {
+        if (is_string($total)) {
+            return $total;
+        }
+
         if ($total > 1000) {
             return number_format($total / 1000, 2).'k';
         }
@@ -363,7 +350,7 @@ class SimpleStat
 
     protected function buildLabel(AggregateType $aggregateType): string
     {
-        if (isset($this->label)) {
+        if ($this->label !== null) {
             return $this->label;
         }
 
@@ -389,7 +376,7 @@ class SimpleStat
 
     protected function getEntityName(): string
     {
-        if (! isset($this->aggregateColumn)) {
+        if ($this->aggregateColumn === null) {
             return Str::plural(Str::title(Str::snake(class_basename($this->model), ' ')));
         }
 
