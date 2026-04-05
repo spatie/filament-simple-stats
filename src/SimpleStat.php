@@ -6,7 +6,9 @@ namespace Spatie\FilamentSimpleStats;
 
 use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Spatie\FilamentSimpleStats\Support\Trend;
 use Spatie\FilamentSimpleStats\Support\TrendValue;
@@ -39,12 +41,16 @@ class SimpleStat
 
     protected ?string $periodGrouping = null;
 
-    public function __construct(private readonly string $model)
+    public function __construct(private readonly string|Builder $model)
     {
-        $this->trend = Trend::model($model)->dateColumn($this->dateColumn);
+        $this->trend = (
+            is_string($model)
+                ? Trend::model($model)
+                : new Trend($model)
+        )->dateColumn($this->dateColumn);
     }
 
-    public static function make(string $model): self
+    public static function make(string|Builder $model): self
     {
         return new self($model);
     }
@@ -382,4 +388,5 @@ class SimpleStat
 
         return Str::plural(Str::title(Str::snake($this->aggregateColumn, ' ')));
     }
+
 }
