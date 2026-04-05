@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Spatie\FilamentSimpleStats\Support\Trend;
 use Spatie\FilamentSimpleStats\Support\TrendValue;
@@ -50,19 +49,20 @@ class SimpleStat
         )->dateColumn($this->dateColumn);
     }
 
-    public static function make(string|Builder $model): self
+    public static function make(string|Builder $model): static
     {
-        return new self($model);
+        /** @phpstan-ignore new.static */
+        return new static($model);
     }
 
-    public function label(string $label): self
+    public function label(string $label): static
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function description(string $description): self
+    public function description(string $description): static
     {
         $this->description = $description;
         $this->overWriteDescription = true;
@@ -70,7 +70,7 @@ class SimpleStat
         return $this;
     }
 
-    public function dateColumn(string $dateColumn): self
+    public function dateColumn(string $dateColumn): static
     {
         $this->trend->dateColumn($dateColumn);
         $this->dateColumn = $dateColumn;
@@ -78,38 +78,38 @@ class SimpleStat
         return $this;
     }
 
-    public function where(mixed $column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): self
+    public function where(mixed $column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): static
     {
         $this->trend->builder->where($column, $operator, $value, $boolean);
 
         return $this;
     }
 
-    public function withoutTrend(): self
+    public function withoutTrend(): static
     {
         $this->showTrend = false;
 
         return $this;
     }
 
-    public function invertTrendColors(): self
+    public function invertTrendColors(): static
     {
         $this->invertTrendColors = true;
 
         return $this;
     }
 
-    public function last7Days(): self
+    public function last7Days(): static
     {
         return $this->lastDays(7);
     }
 
-    public function last30Days(): self
+    public function last30Days(): static
     {
         return $this->lastDays(30);
     }
 
-    public function lastDays(int $days): self
+    public function lastDays(int $days): static
     {
         $this->periodStart = now()->startOfDay()->subDays($days - 1);
         $this->periodEnd = now()->endOfDay();
@@ -128,7 +128,7 @@ class SimpleStat
         return $this;
     }
 
-    public function lastMonths(int $months): self
+    public function lastMonths(int $months): static
     {
         $this->periodStart = now()->subMonths($months);
         $this->periodEnd = now()->endOfDay();
@@ -147,7 +147,7 @@ class SimpleStat
         return $this;
     }
 
-    public function lastYears(int $years): self
+    public function lastYears(int $years): static
     {
         $this->periodStart = now()->subYears($years);
         $this->periodEnd = now()->endOfDay();
@@ -388,5 +388,4 @@ class SimpleStat
 
         return Str::plural(Str::title(Str::snake($this->aggregateColumn, ' ')));
     }
-
 }
