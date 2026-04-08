@@ -2,6 +2,19 @@
 
 All notable changes to `filament-simple-stats` will be documented in this file.
 
+## 1.2.0 - 2026-04-08
+
+### What's Changed
+
+* Add Laravel 13 support by @freekmurze in https://github.com/spatie/filament-simple-stats/pull/30
+* Inline flowframe/laravel-trend and add Laravel 13 support by @freekmurze in https://github.com/spatie/filament-simple-stats/pull/31
+
+### New Contributors
+
+* @freekmurze made their first contribution in https://github.com/spatie/filament-simple-stats/pull/30
+
+**Full Changelog**: https://github.com/spatie/filament-simple-stats/compare/1.1.0...1.2.0
+
 ## 1.1.0 - 2026-02-09
 
 ### What's Changed
