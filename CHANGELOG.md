@@ -2,6 +2,20 @@
 
 All notable changes to `filament-simple-stats` will be documented in this file.
 
+## 1.2.1 - 2026-04-20
+
+### What's Changed
+
+* Bump ramsey/composer-install from 3 to 4 by @dependabot[bot] in https://github.com/spatie/filament-simple-stats/pull/29
+* Bump dependabot/fetch-metadata from 2.5.0 to 3.0.0 by @dependabot[bot] in https://github.com/spatie/filament-simple-stats/pull/32
+* Support Eloquent Builder in SimpleStat and use static return type by @lloricode in https://github.com/spatie/filament-simple-stats/pull/33
+
+### New Contributors
+
+* @lloricode made their first contribution in https://github.com/spatie/filament-simple-stats/pull/33
+
+**Full Changelog**: https://github.com/spatie/filament-simple-stats/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2026-04-08
 
 ### What's Changed
